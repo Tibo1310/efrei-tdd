@@ -3,7 +3,7 @@ const Card = require('../src/card');
 describe('Card', () => {
   describe('constructor', () => {
     test('should create a card with rank and suit', () => {
-      const card = new Card('Q', 'H');
+      const card = new Card('K', 'H');
       
       expect(card.rank).toBe('K');
       expect(card.suit).toBe('H');
