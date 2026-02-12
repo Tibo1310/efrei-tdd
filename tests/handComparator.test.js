@@ -139,4 +139,36 @@ describe('HandComparator', () => {
       expect(result).toBe(0); // égalité
     });
   });
+
+  describe('compare - Straight', () => {
+    test('should compare straights by highest card', () => {
+      // 9-high straight bat 7-high straight
+      const hand1 = Hand.fromStrings(['9D', '8C', '7S', '6H', '5D']);
+      const hand2 = Hand.fromStrings(['7D', '6C', '5S', '4H', '3D']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should treat wheel (A-2-3-4-5) as 5-high straight', () => {
+      // 6-high straight bat wheel (5-high)
+      const hand1 = Hand.fromStrings(['6D', '5C', '4S', '3H', '2D']);
+      const hand2 = Hand.fromStrings(['AH', '2C', '3S', '4D', '5H']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should return 0 for identical straights', () => {
+      // 9-high straight égalité
+      const hand1 = Hand.fromStrings(['9D', '8C', '7S', '6H', '5D']);
+      const hand2 = Hand.fromStrings(['9H', '8S', '7D', '6C', '5H']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(0); // égalité
+    });
+  });
 });

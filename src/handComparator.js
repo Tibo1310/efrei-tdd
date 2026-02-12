@@ -33,6 +33,10 @@ class HandComparator {
     if (category === 'THREE_OF_A_KIND') {
       return this.compareThreeOfAKind(hand1, hand2);
     }
+
+    if (category === 'STRAIGHT') {
+      return this.compareStraight(hand1, hand2);
+    }
     
     // pour l'instant, autres catégories = égalité
     return 0;
@@ -122,6 +126,31 @@ class HandComparator {
     }
     
     return 0; // égalité
+  }
+
+  // compare deux suites
+  // compare la carte la plus haute (attention : roue = 5-high)
+  static compareStraight(hand1, hand2) {
+    const high1 = this.getStraightHighCard(hand1.cards);
+    const high2 = this.getStraightHighCard(hand2.cards);
+    
+    if (high1 > high2) return 1;
+    if (high1 < high2) return -1;
+    return 0; // égalité
+  }
+
+  // récupère la carte haute d'une suite
+  // roue (A-2-3-4-5) retourne 5
+  static getStraightHighCard(cards) {
+    const values = this.getCardValues(cards).sort((a, b) => a - b);
+    
+    // cas spécial : roue (A-2-3-4-5) où values = [2,3,4,5,14]
+    const isWheel = values[0] === 2 && values[1] === 3 && values[2] === 4 && 
+                    values[3] === 5 && values[4] === 14;
+    
+    if (isWheel) return 5; // roue = 5-high
+    
+    return values[4]; // carte la plus haute
   }
 
   // trouve le rang de la paire et les kickers
