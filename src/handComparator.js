@@ -41,8 +41,19 @@ class HandComparator {
     if (category === 'FLUSH') {
       return this.compareFlush(hand1, hand2);
     }
+
+    if (category === 'FULL_HOUSE') {
+      return this.compareFullHouse(hand1, hand2);
+    }
+
+    if (category === 'FOUR_OF_A_KIND') {
+      return this.compareFourOfAKind(hand1, hand2);
+    }
+
+    if (category === 'STRAIGHT_FLUSH') {
+      return this.compareStraightFlush(hand1, hand2);
+    }
     
-    // pour l'instant, autres catégories = égalité
     return 0;
   }
 
@@ -157,6 +168,52 @@ class HandComparator {
     return 0; // égalité
   }
 
+  // compare deux full house
+  // compare d'abord le brelan puis la paire
+  static compareFullHouse(hand1, hand2) {
+    const values1 = this.getCardValues(hand1.cards);
+    const values2 = this.getCardValues(hand2.cards);
+    
+    const full1 = this.findFullHouseParts(values1);
+    const full2 = this.findFullHouseParts(values2);
+    
+    // compare d'abord le brelan
+    if (full1.triplet > full2.triplet) return 1;
+    if (full1.triplet < full2.triplet) return -1;
+    
+    // brelan égal : compare la paire
+    if (full1.pair > full2.pair) return 1;
+    if (full1.pair < full2.pair) return -1;
+    
+    return 0; // égalité
+  }
+
+  // compare deux carrés
+  // compare d'abord le carré puis le kicker
+  static compareFourOfAKind(hand1, hand2) {
+    const values1 = this.getCardValues(hand1.cards);
+    const values2 = this.getCardValues(hand2.cards);
+    
+    const four1 = this.findFourOfAKindAndKicker(values1);
+    const four2 = this.findFourOfAKindAndKicker(values2);
+    
+    // compare d'abord le carré
+    if (four1.quadRank > four2.quadRank) return 1;
+    if (four1.quadRank < four2.quadRank) return -1;
+    
+    // carré égal : compare le kicker
+    if (four1.kicker > four2.kicker) return 1;
+    if (four1.kicker < four2.kicker) return -1;
+    
+    return 0; // égalité
+  }
+
+  // compare deux straight flush
+  // même logique que straight (carte haute, roue = 5-high)
+  static compareStraightFlush(hand1, hand2) {
+    return this.compareStraight(hand1, hand2);
+  }
+
   // récupère la carte haute d'une suite
   // roue (A-2-3-4-5) retourne 5
   static getStraightHighCard(cards) {
@@ -239,6 +296,46 @@ class HandComparator {
     kickers.sort((a, b) => b - a); // tri décroissant
     
     return { tripletRank, kickers };
+  }
+
+  // trouve le brelan et la paire d'un full house
+  static findFullHouseParts(values) {
+    const counts = {};
+    values.forEach(v => counts[v] = (counts[v] || 0) + 1);
+    
+    let triplet = 0;
+    let pair = 0;
+    
+    for (const [rank, count] of Object.entries(counts)) {
+      const rankNum = parseInt(rank);
+      if (count === 3) {
+        triplet = rankNum;
+      } else if (count === 2) {
+        pair = rankNum;
+      }
+    }
+    
+    return { triplet, pair };
+  }
+
+  // trouve le rang du carré et le kicker
+  static findFourOfAKindAndKicker(values) {
+    const counts = {};
+    values.forEach(v => counts[v] = (counts[v] || 0) + 1);
+    
+    let quadRank = 0;
+    let kicker = 0;
+    
+    for (const [rank, count] of Object.entries(counts)) {
+      const rankNum = parseInt(rank);
+      if (count === 4) {
+        quadRank = rankNum;
+      } else {
+        kicker = rankNum;
+      }
+    }
+    
+    return { quadRank, kicker };
   }
 
   // convertit les cartes en valeurs numériques

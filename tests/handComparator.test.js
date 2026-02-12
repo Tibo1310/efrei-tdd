@@ -203,4 +203,100 @@ describe('HandComparator', () => {
       expect(result).toBe(0); // égalité
     });
   });
+
+  describe('compare - Full House', () => {
+    test('should compare full houses by three of a kind first', () => {
+      // full (brelan de rois) bat full (brelan de 10)
+      const hand1 = Hand.fromStrings(['KH', 'KD', 'KC', '3S', '3H']);
+      const hand2 = Hand.fromStrings(['TH', 'TD', 'TC', 'AS', 'AH']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should compare full houses by pair when three of a kind is equal', () => {
+      // full (brelan de rois + paire de 8) bat full (brelan de rois + paire de 3)
+      const hand1 = Hand.fromStrings(['KH', 'KD', 'KC', '8S', '8H']);
+      const hand2 = Hand.fromStrings(['KS', 'KC', 'KH', '3D', '3C']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should return 0 for identical full houses', () => {
+      // full identiques
+      const hand1 = Hand.fromStrings(['KH', 'KD', 'KC', '8S', '8H']);
+      const hand2 = Hand.fromStrings(['KS', 'KC', 'KH', '8D', '8C']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(0); // égalité
+    });
+  });
+
+  describe('compare - Four of a Kind', () => {
+    test('should compare four of a kind by quad rank', () => {
+      // carré de rois bat carré de 10
+      const hand1 = Hand.fromStrings(['KH', 'KD', 'KC', 'KS', '3H']);
+      const hand2 = Hand.fromStrings(['TH', 'TD', 'TC', 'TS', 'AH']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should compare four of a kind by kicker when quad is equal', () => {
+      // carré de rois + as bat carré de rois + 3
+      const hand1 = Hand.fromStrings(['KH', 'KD', 'KC', 'KS', 'AH']);
+      const hand2 = Hand.fromStrings(['KH', 'KD', 'KC', 'KS', '3H']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should return 0 for identical four of a kind', () => {
+      // carré identiques
+      const hand1 = Hand.fromStrings(['KH', 'KD', 'KC', 'KS', 'AH']);
+      const hand2 = Hand.fromStrings(['KH', 'KD', 'KC', 'KS', 'AD']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(0); // égalité
+    });
+  });
+
+  describe('compare - Straight Flush', () => {
+    test('should compare straight flushes by highest card', () => {
+      // 9-high straight flush bat 7-high straight flush
+      const hand1 = Hand.fromStrings(['9D', '8D', '7D', '6D', '5D']);
+      const hand2 = Hand.fromStrings(['7H', '6H', '5H', '4H', '3H']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should treat straight flush wheel as 5-high', () => {
+      // 6-high straight flush bat wheel straight flush
+      const hand1 = Hand.fromStrings(['6D', '5D', '4D', '3D', '2D']);
+      const hand2 = Hand.fromStrings(['AH', '2H', '3H', '4H', '5H']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should return 0 for identical straight flushes', () => {
+      // straight flush identiques
+      const hand1 = Hand.fromStrings(['9D', '8D', '7D', '6D', '5D']);
+      const hand2 = Hand.fromStrings(['9H', '8H', '7H', '6H', '5H']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(0); // égalité
+    });
+  });
 });
