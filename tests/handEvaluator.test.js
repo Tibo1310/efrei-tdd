@@ -44,4 +44,15 @@ describe('HandEvaluator', () => {
       expect(result.rank).toBe(4);
     });
   });
+
+  describe('evaluate - Straight', () => {
+    test('should detect straight', () => {
+      // suite : 9-8-7-6-5
+      const hand = Hand.fromStrings(['9H', '8D', '7S', '6C', '5D']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('STRAIGHT');
+      expect(result.rank).toBe(5);
+    });
+  });
 });
