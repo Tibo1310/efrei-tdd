@@ -10,8 +10,16 @@ class HandEvaluator {
     const rankCounts = this.getRankCounts(cards);
     const counts = Object.values(rankCounts).sort((a, b) => b - a);
     
+    // vérifie si c'est une couleur (5 cartes avec la même couleur)
+    const isFlush = this.isFlush(cards);
+    
     // vérifie si c'est une suite (5 rangs consécutifs)
     const isStraight = this.isStraight(cards);
+    
+    // couleur : 5 cartes de même couleur
+    if (isFlush) {
+      return { category: 'FLUSH', rank: 6 };
+    }
     
     // suite : 5 rangs consécutifs
     if (isStraight) {
@@ -45,6 +53,13 @@ class HandEvaluator {
       counts[card.rank] = (counts[card.rank] || 0) + 1;
     }
     return counts;
+  }
+
+  // vérifie si toutes les cartes ont la même couleur
+  // retourne : true si c'est une couleur
+  static isFlush(cards) {
+    const firstSuit = cards[0].suit;
+    return cards.every(card => card.suit === firstSuit);
   }
 
   // vérifie si les cartes forment une suite

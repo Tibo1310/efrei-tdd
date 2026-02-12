@@ -64,4 +64,15 @@ describe('HandEvaluator', () => {
       expect(result.rank).toBe(5);
     });
   });
+
+  describe('evaluate - Flush', () => {
+    test('should detect flush', () => {
+      // couleur : 5 cartes Pique
+      const hand = Hand.fromStrings(['KS', '9S', '6S', '4S', '2S']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('FLUSH');
+      expect(result.rank).toBe(6);
+    });
+  });
 });
