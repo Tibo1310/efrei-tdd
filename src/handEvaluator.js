@@ -16,6 +16,11 @@ class HandEvaluator {
     // vérifie si c'est une suite (5 rangs consécutifs)
     const isStraight = this.isStraight(cards);
     
+    // quinte flush : suite + couleur
+    if (isStraight && isFlush) {
+      return { category: 'STRAIGHT_FLUSH', rank: 9 };
+    }
+    
     // couleur : 5 cartes de même couleur
     if (isFlush) {
       return { category: 'FLUSH', rank: 6 };
@@ -24,6 +29,11 @@ class HandEvaluator {
     // suite : 5 rangs consécutifs
     if (isStraight) {
       return { category: 'STRAIGHT', rank: 5 };
+    }
+    
+    // carré : 4 cartes identiques
+    if (counts[0] === 4) {
+      return { category: 'FOUR_OF_A_KIND', rank: 8 };
     }
     
     // full house : brelan + paire

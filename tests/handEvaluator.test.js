@@ -86,4 +86,26 @@ describe('HandEvaluator', () => {
       expect(result.rank).toBe(7);
     });
   });
+
+  describe('evaluate - Four of a Kind', () => {
+    test('should detect four of a kind', () => {
+      // carré de 5
+      const hand = Hand.fromStrings(['5H', '5D', '5S', '5C', 'KD']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('FOUR_OF_A_KIND');
+      expect(result.rank).toBe(8);
+    });
+  });
+
+  describe('evaluate - Straight Flush', () => {
+    test('should detect straight flush', () => {
+      // quinte flush : 7-6-5-4-3 de Coeur
+      const hand = Hand.fromStrings(['7H', '6H', '5H', '4H', '3H']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('STRAIGHT_FLUSH');
+      expect(result.rank).toBe(9);
+    });
+  });
 });
