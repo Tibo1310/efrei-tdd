@@ -64,7 +64,13 @@ class HandEvaluator {
       return val === values[i - 1] + 1;
     });
     
-    return isNormalStraight;
+    if (isNormalStraight) return true;
+    
+    // cas spécial : roue (A-2-3-4-5) où l'As vaut 1
+    const isWheel = values[0] === 2 && values[1] === 3 && values[2] === 4 && 
+                    values[3] === 5 && values[4] === 14;
+    
+    return isWheel;
   }
 }
 

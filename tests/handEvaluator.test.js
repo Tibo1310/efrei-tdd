@@ -54,5 +54,14 @@ describe('HandEvaluator', () => {
       expect(result.category).toBe('STRAIGHT');
       expect(result.rank).toBe(5);
     });
+
+    test('should detect wheel (A-2-3-4-5)', () => {
+      // roue : As-5-4-3-2 (suite spéciale où As vaut 1)
+      const hand = Hand.fromStrings(['AH', '2D', '3S', '4C', '5D']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('STRAIHGT');
+      expect(result.rank).toBe(5);
+    });
   });
 });
