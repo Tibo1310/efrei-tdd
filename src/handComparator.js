@@ -22,6 +22,10 @@ class HandComparator {
       return this.compareHighCard(hand1, hand2);
     }
     
+    if (category === 'PAIR') {
+      return this.comparePair(hand1, hand2);
+    }
+    
     // pour l'instant, autres catégories = égalité
     return 0;
   }
@@ -39,6 +43,51 @@ class HandComparator {
     }
     
     return 0; // égalité
+  }
+
+  // compare deux paires
+  // compare rang de la paire, puis kickers
+  static comparePair(hand1, hand2) {
+    const values1 = this.getCardValues(hand1.cards);
+    const values2 = this.getCardValues(hand2.cards);
+    
+    // trouve le rang de la paire et les kickers
+    const pair1 = this.findPairAndKickers(values1);
+    const pair2 = this.findPairAndKickers(values2);
+    
+    // compare le rang de la paire
+    if (pair1.pairRank > pair2.pairRank) return 1;
+    if (pair1.pairRank < pair2.pairRank) return -1;
+    
+    // paires égales : compare les kickers en ordre décroissant
+    for (let i = 0; i < pair1.kickers.length; i++) {
+      if (pair1.kickers[i] > pair2.kickers[i]) return 1;
+      if (pair1.kickers[i] < pair2.kickers[i]) return -1;
+    }
+    
+    return 0; // egalite
+  }
+
+  // trouve le rang de la paire et les kickers
+  static findPairAndKickers(values) {
+    const counts = {};
+    values.forEach(v => counts[v] = (counts[v] || 0) + 1);
+    
+    let pairRank = 0;
+    const kickers = [];
+    
+    for (const [rank, count] of Object.entries(counts)) {
+      const rankNum = parseInt(rank);
+      if (count === 2) {
+        pairRank = rankNum;
+      } else {
+        kickers.push(rankNum);
+      }
+    }
+    
+    kickers.sort((a, b) => b - a); // tri décroissant
+    
+    return { pairRank, kickers };
   }
 
   // convertit les cartes en valeurs numériques
