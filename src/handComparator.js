@@ -29,6 +29,10 @@ class HandComparator {
     if (category === 'TWO_PAIR') {
       return this.compareTwoPair(hand1, hand2);
     }
+
+    if (category === 'THREE_OF_A_KIND') {
+      return this.compareThreeOfAKind(hand1, hand2);
+    }
     
     // pour l'instant, autres catégories = égalité
     return 0;
@@ -97,6 +101,29 @@ class HandComparator {
     return 0; // égalité
   }
 
+  // compare deux brelans
+  // compare rang du brelan, puis kickers
+  static compareThreeOfAKind(hand1, hand2) {
+    const values1 = this.getCardValues(hand1.cards);
+    const values2 = this.getCardValues(hand2.cards);
+    
+    // trouve le rang du brelan et les kickers
+    const three1 = this.findThreeOfAKindAndKickers(values1);
+    const three2 = this.findThreeOfAKindAndKickers(values2);
+    
+    // compare le rang du brelan
+    if (three1.tripletRank > three2.tripletRank) return 1;
+    if (three1.tripletRank < three2.tripletRank) return -1;
+    
+    // brelan égal : compare les kickers en ordre décroissant
+    for (let i = 0; i < three1.kickers.length; i++) {
+      if (three1.kickers[i] > three2.kickers[i]) return 1;
+      if (three1.kickers[i] < three2.kickers[i]) return -1;
+    }
+    
+    return 0; // égalité
+  }
+
   // trouve le rang de la paire et les kickers
   static findPairAndKickers(values) {
     const counts = {};
@@ -143,6 +170,28 @@ class HandComparator {
       lowPair: pairs[1], 
       kicker 
     };
+  }
+
+  // trouve le rang du brelan et les kickers
+  static findThreeOfAKindAndKickers(values) {
+    const counts = {};
+    values.forEach(v => counts[v] = (counts[v] || 0) + 1);
+    
+    let tripletRank = 0;
+    const kickers = [];
+    
+    for (const [rank, count] of Object.entries(counts)) {
+      const rankNum = parseInt(rank);
+      if (count === 3) {
+        tripletRank = rankNum;
+      } else {
+        kickers.push(rankNum);
+      }
+    }
+    
+    kickers.sort((a, b) => b - a); // tri décroissant
+    
+    return { tripletRank, kickers };
   }
 
   // convertit les cartes en valeurs numériques

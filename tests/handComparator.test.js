@@ -107,4 +107,36 @@ describe('HandComparator', () => {
       expect(result).toBe(0); // égalité
     });
   });
+
+  describe('compare - Three of a Kind', () => {
+    test('should compare three of a kind by triplet rank', () => {
+      // 9-9-9 bat 7-7-7
+      const hand1 = Hand.fromStrings(['9D', '9C', '9S', 'KH', '2D']);
+      const hand2 = Hand.fromStrings(['7D', '7C', '7S', 'AH', '2D']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should compare three of a kind by kickers if triplet is same', () => {
+      // 9-9-9-A-5 bat 9-9-9-K-5 (kicker A > K)
+      const hand1 = Hand.fromStrings(['9D', '9C', '9S', 'AH', '5D']);
+      const hand2 = Hand.fromStrings(['9H', '9S', '9D', 'KH', '5C']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should return 0 for identical three of a kind', () => {
+      // 9-9-9-A-5 égalité
+      const hand1 = Hand.fromStrings(['9D', '9C', '9S', 'AH', '5D']);
+      const hand2 = Hand.fromStrings(['9H', '9S', '9D', 'AC', '5H']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(0); // égalité
+    });
+  });
 });
