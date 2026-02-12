@@ -10,6 +10,11 @@ class HandEvaluator {
     const rankCounts = this.getRankCounts(cards);
     const counts = Object.values(rankCounts).sort((a, b) => b - a);
     
+    // brelan : 3 cartes identiques
+    if (counts[0] === 3) {
+      return { category: 'THREE_OF_A_KIND', rank: 4 };
+    }
+    
     // double paire : 2 paires
     if (counts[0] === 2 && counts[1] === 2) {
       return { category: 'TWO_PAIR', rank: 3 };

@@ -33,4 +33,15 @@ describe('HandEvaluator', () => {
       expect(result.rank).toBe(3);
     });
   });
+
+  describe('evaluate - Three of a Kind', () => {
+    test('should detect three of a kind', () => {
+      // brelan de 8
+      const hand = Hand.fromStrings(['8H', '8D', '8S', 'KC', '3D']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('THREE_OF_A_KIND');
+      expect(result.rank).toBe(4);
+    });
+  });
 });
