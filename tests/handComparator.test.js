@@ -65,4 +65,46 @@ describe('HandComparator', () => {
       expect(result).toBe(0); // égalité
     });
   });
+
+  describe('compare - Two Pair', () => {
+    test('should compare two pairs by higher pair', () => {
+      // K-K-5-5 bat Q-Q-9-9 (paire haute K > Q)
+      const hand1 = Hand.fromStrings(['KD', 'KC', '5S', '5H', '2D']);
+      const hand2 = Hand.fromStrings(['QD', 'QC', '9S', '9H', '2D']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should compare two pairs by lower pair if higher is same', () => {
+      // K-K-7-7 bat K-K-6-6 (paire basse 7 > 6)
+      const hand1 = Hand.fromStrings(['KD', 'KC', '7S', '7H', '2D']);
+      const hand2 = Hand.fromStrings(['KH', 'KS', '6D', '6C', '2H']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should compare two pairs by kicker if both pairs are same', () => {
+      // K-K-7-7-A bat K-K-7-7-Q (kicker A > Q)
+      const hand1 = Hand.fromStrings(['KD', 'KC', '7S', '7H', 'AD']);
+      const hand2 = Hand.fromStrings(['KH', 'KS', '7D', '7C', 'QH']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should return 0 for identical two pairs', () => {
+      // K-K-7-7-A égalité
+      const hand1 = Hand.fromStrings(['KD', 'KC', '7S', '7H', 'AD']);
+      const hand2 = Hand.fromStrings(['KH', 'KS', '7D', '7C', 'AH']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(0); // égalité
+    });
+  });
 });

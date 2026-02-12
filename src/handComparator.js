@@ -25,6 +25,10 @@ class HandComparator {
     if (category === 'PAIR') {
       return this.comparePair(hand1, hand2);
     }
+
+    if (category === 'TWO_PAIR') {
+      return this.compareTwoPair(hand1, hand2);
+    }
     
     // pour l'instant, autres catégories = égalité
     return 0;
@@ -68,6 +72,31 @@ class HandComparator {
     return 0; // egalite
   }
 
+  // compare deux doubles paires
+  // compare paire haute, puis paire basse, puis kicker
+  static compareTwoPair(hand1, hand2) {
+    const values1 = this.getCardValues(hand1.cards);
+    const values2 = this.getCardValues(hand2.cards);
+    
+    // trouve les deux paires et le kicker
+    const twoPair1 = this.findTwoPairsAndKicker(values1);
+    const twoPair2 = this.findTwoPairsAndKicker(values2);
+    
+    // compare la paire haute
+    if (twoPair1.highPair > twoPair2.highPair) return 1;
+    if (twoPair1.highPair < twoPair2.highPair) return -1;
+    
+    // paire haute égale : compare la paire basse
+    if (twoPair1.lowPair > twoPair2.lowPair) return 1;
+    if (twoPair1.lowPair < twoPair2.lowPair) return -1;
+    
+    // deux paires égales : compare le kicker
+    if (twoPair1.kicker > twoPair2.kicker) return 1;
+    if (twoPair1.kicker < twoPair2.kicker) return -1;
+    
+    return 0; // égalité
+  }
+
   // trouve le rang de la paire et les kickers
   static findPairAndKickers(values) {
     const counts = {};
@@ -88,6 +117,32 @@ class HandComparator {
     kickers.sort((a, b) => b - a); // tri décroissant
     
     return { pairRank, kickers };
+  }
+
+  // trouve les deux paires et le kicker
+  static findTwoPairsAndKicker(values) {
+    const counts = {};
+    values.forEach(v => counts[v] = (counts[v] || 0) + 1);
+    
+    const pairs = [];
+    let kicker = 0;
+    
+    for (const [rank, count] of Object.entries(counts)) {
+      const rankNum = parseInt(rank);
+      if (count === 2) {
+        pairs.push(rankNum);
+      } else {
+        kicker = rankNum;
+      }
+    }
+    
+    pairs.sort((a, b) => b - a); // tri décroissant
+    
+    return { 
+      highPair: pairs[0], 
+      lowPair: pairs[1], 
+      kicker 
+    };
   }
 
   // convertit les cartes en valeurs numériques
