@@ -12,4 +12,13 @@ describe('HandEvaluator', () => {
       expect(result.rank).toBe(1); // rang 1 = catégorie la plus faible (pire main)
     });
   });
-});
+  describe('evaluate - One Pair', () => {
+    test('should detect one pair', () => {
+      // paire de 9
+      const hand = Hand.fromStrings(['9H', '9D', 'KS', '6C', '2D']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('PAIR');
+      expect(result.rank).toBe(2);
+    });
+  });});
