@@ -60,7 +60,7 @@ describe('HandEvaluator', () => {
       const hand = Hand.fromStrings(['AH', '2D', '3S', '4C', '5D']);
       const result = HandEvaluator.evaluate(hand);
       
-      expect(result.category).toBe('STRAIHGT');
+      expect(result.category).toBe('STRAIGHT');
       expect(result.rank).toBe(5);
     });
   });
