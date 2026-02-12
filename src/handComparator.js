@@ -37,6 +37,10 @@ class HandComparator {
     if (category === 'STRAIGHT') {
       return this.compareStraight(hand1, hand2);
     }
+
+    if (category === 'FLUSH') {
+      return this.compareFlush(hand1, hand2);
+    }
     
     // pour l'instant, autres catégories = égalité
     return 0;
@@ -136,6 +140,20 @@ class HandComparator {
     
     if (high1 > high2) return 1;
     if (high1 < high2) return -1;
+    return 0; // égalité
+  }
+
+  // compare deux flush
+  // compare les 5 cartes en ordre décroissant
+  static compareFlush(hand1, hand2) {
+    const values1 = this.getCardValues(hand1.cards).sort((a, b) => b - a);
+    const values2 = this.getCardValues(hand2.cards).sort((a, b) => b - a);
+    
+    for (let i = 0; i < 5; i++) {
+      if (values1[i] > values2[i]) return 1;
+      if (values1[i] < values2[i]) return -1;
+    }
+    
     return 0; // égalité
   }
 

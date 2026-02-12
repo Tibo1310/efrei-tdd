@@ -171,4 +171,36 @@ describe('HandComparator', () => {
       expect(result).toBe(0); // égalité
     });
   });
+
+  describe('compare - Flush', () => {
+    test('should compare flushes by highest card', () => {
+      // flush avec as bat flush avec roi
+      const hand1 = Hand.fromStrings(['AH', 'JH', '9H', '6H', '3H']);
+      const hand2 = Hand.fromStrings(['KD', 'QD', 'TD', '7D', '4D']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne
+    });
+
+    test('should compare flushes card by card when highest is equal', () => {
+      // même carte haute, on compare la 2e, puis 3e, etc.
+      const hand1 = Hand.fromStrings(['AH', 'JH', '8H', '6H', '3H']);
+      const hand2 = Hand.fromStrings(['AD', 'JD', '7D', '6D', '3D']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(1); // hand1 gagne (8 > 7)
+    });
+
+    test('should return 0 for identical flushes', () => {
+      // flush identiques en rangs
+      const hand1 = Hand.fromStrings(['AH', 'JH', '9H', '6H', '3H']);
+      const hand2 = Hand.fromStrings(['AD', 'JD', '9D', '6D', '3D']);
+      
+      const result = HandComparator.compare(hand1, hand2);
+      
+      expect(result).toBe(0); // égalité
+    });
+  });
 });
