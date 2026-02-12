@@ -21,4 +21,16 @@ describe('HandEvaluator', () => {
       expect(result.category).toBe('PAIR');
       expect(result.rank).toBe(2);
     });
-  });});
+  });
+
+  describe('evaluate - Two Pair', () => {
+    test('should detect two pair', () => {
+      // paire de Jack et paire de 4
+      const hand = Hand.fromStrings(['JH', 'JD', '4S', '4C', 'AD']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('TWO_PAIR');
+      expect(result.rank).toBe(3);
+    });
+  });
+});

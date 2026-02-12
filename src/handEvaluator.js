@@ -10,6 +10,11 @@ class HandEvaluator {
     const rankCounts = this.getRankCounts(cards);
     const counts = Object.values(rankCounts).sort((a, b) => b - a);
     
+    // double paire : 2 paires
+    if (counts[0] === 2 && counts[1] === 2) {
+      return { category: 'TWO_PAIR', rank: 3 };
+    }
+    
     // paire : 2 cartes identiques
     if (counts[0] === 2) {
       return { category: 'PAIR', rank: 2 };
