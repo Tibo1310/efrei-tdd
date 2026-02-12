@@ -44,7 +44,7 @@ src/
   ├── bestHandFinder.js    # Meilleure main parmi 7 cartes
   └── pokerGame.js         # Multi-joueurs + split pot
 
-tests/                     # 76 tests couvrant tous les cas
+tests/                     # 83 tests couvrant tous les cas
 ```
 
 ## Utilisation
