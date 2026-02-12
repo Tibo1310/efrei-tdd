@@ -59,6 +59,17 @@ const players = [
 const board = ['QH', 'JH', '9H', '4H', '2H'];
 
 const result = PokerGame.determineWinners(players, board);
+
+// gagnant(s)
 console.log(result.winners);              // ['Thibault']
 console.log(result.winningHand.category); // 'FLUSH'
+
+// détails de chaque joueur (meilleure main + chosen5)
+console.log(result.players[0].name);      // 'Thibault'
+console.log(result.players[0].category);  // 'FLUSH'
+console.log(result.players[0].hand);      // Hand with 5 cards (ordered)
+
+console.log(result.players[1].name);      // 'Romain'
+console.log(result.players[1].category);  // 'THREE_OF_A_KIND'
+console.log(result.players[1].hand);      // Hand with 5 cards (ordered)
 ```

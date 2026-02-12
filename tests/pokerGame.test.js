@@ -104,4 +104,54 @@ describe('PokerGame', () => {
       expect(result.winningHand.category).toBe('HIGH_CARD');
     });
   });
+
+  describe('determineWinners - player details', () => {
+    test('should return details for each player', () => {
+      const players = [
+        { name: 'Alice', holeCards: ['AH', 'KH'] },
+        { name: 'Bob', holeCards: ['QC', 'QS'] }
+      ];
+      const board = ['QH', '3D', '5C', '7S', '9H'];
+      
+      const result = PokerGame.determineWinners(players, board);
+      
+      // doit retourner les détails de chaque joueur
+      expect(result.players).toBeDefined();
+      expect(result.players.length).toBe(2);
+      
+      // alice
+      const alice = result.players.find(p => p.name === 'Alice');
+      expect(alice.category).toBe('HIGH_CARD');
+      expect(alice.hand.cards.length).toBe(5);
+      
+      // bob
+      const bob = result.players.find(p => p.name === 'Bob');
+      expect(bob.category).toBe('THREE_OF_A_KIND');
+      expect(bob.hand.cards.length).toBe(5);
+    });
+
+    test('should include chosen5 cards for each player', () => {
+      const players = [
+        { name: 'Alice', holeCards: ['KH', 'KD'] },
+        { name: 'Bob', holeCards: ['AH', 'AD'] }
+      ];
+      const board = ['KC', '3H', '5D', '7C', '9S'];
+      
+      const result = PokerGame.determineWinners(players, board);
+      
+      // vérifier que chaque joueur a ses chosen5
+      result.players.forEach(player => {
+        expect(player.hand).toBeDefined();
+        expect(player.hand.cards).toHaveLength(5);
+        expect(player.category).toBeDefined();
+        expect(player.rank).toBeDefined();
+      });
+      
+      // alice a brelan de rois
+      const alice = result.players.find(p => p.name === 'Alice');
+      expect(alice.category).toBe('THREE_OF_A_KIND');
+      const aliceRanks = alice.hand.cards.map(c => c.rank);
+      expect(aliceRanks.slice(0, 3)).toEqual(['K', 'K', 'K']);
+    });
+  });
 });
