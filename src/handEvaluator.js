@@ -26,6 +26,11 @@ class HandEvaluator {
       return { category: 'STRAIGHT', rank: 5 };
     }
     
+    // full house : brelan + paire
+    if (counts[0] === 3 && counts[1] === 2) {
+      return { category: 'FULL_HOUSE', rank: 7 };
+    }
+    
     // brelan : 3 cartes identiques
     if (counts[0] === 3) {
       return { category: 'THREE_OF_A_KIND', rank: 4 };

@@ -75,4 +75,15 @@ describe('HandEvaluator', () => {
       expect(result.rank).toBe(6);
     });
   });
+
+  describe('evaluate - Full House', () => {
+    test('should detect full house', () => {
+      // full : brelan de 7 + paire de 3
+      const hand = Hand.fromStrings(['7H', '7D', '7S', '3C', '3D']);
+      const result = HandEvaluator.evaluate(hand);
+      
+      expect(result.category).toBe('FULL_HOUSE');
+      expect(result.rank).toBe(7);
+    });
+  });
 });
